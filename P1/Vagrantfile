@@ -1,0 +1,35 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/bullseye64"
+
+  # Configuración del Nodo Servidor (Master)
+  config.vm.define "vruiz-goS" do |s|
+    s.vm.network "private_network", ip: "192.168.56.110"
+    s.vm.hostname = "vruiz-goS"
+    s.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+      v.cpus = 1
+      v.name = "vruiz-goS"
+    end
+    s.vm.provision "shell", inline: <<-SHELL
+      curl -sfL https://get.k3s.io | K3S_TOKEN=token-secreto-vruiz sh -s - server \
+        --node-ip 192.168.56.110 \
+        --write-kubeconfig-mode 644
+    SHELL
+  end
+
+  # Configuración del Nodo Worker (Agent)
+  config.vm.define "vruiz-goSW" do |sw|
+    sw.vm.network "private_network", ip: "192.168.56.111"
+    sw.vm.hostname = "vruiz-goSW"
+    sw.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+      v.cpus = 1
+      v.name = "vruiz-goSW"
+    end
+    sw.vm.provision "shell", inline: <<-SHELL
+      curl -sfL https://get.k3s.io | K3S_URL=https://192.168.56.110:6443 \
+        K3S_TOKEN=token-secreto-vruiz sh -s - agent \
+        --node-ip 192.168.56.111
+    SHELL
+  end
+end
