@@ -1,0 +1,37 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/bullseye64"
+
+  config.vm.define "vruiz-goS" do |s|
+    s.vm.network "private_network", ip: "192.168.56.110"
+    s.vm.hostname = "vruiz-goS"
+
+    s.vm.provider "virtualbox" do |v|
+      v.memory = 1024
+      v.cpus = 1
+      v.name = "vruiz-goS"
+    end
+
+    # Sincronizamos la carpeta local para acceder a los manifiestos
+    s.vm.synced_folder "confs/", "/vagrant/confs"
+
+    # Provisionado por Shell
+    s.vm.provision "shell", inline: <<-SHELL
+      export DEBIAN_FRONTEND=noninteractive
+      # Instalar k3s en modo server
+      curl -sfL https://get.k3s.io | sh -s - server \
+        --node-ip 192.168.56.110 \
+        --write-kubeconfig-mode 644
+
+      echo "Waiting for K3S to start..."
+      sleep 15
+      
+      echo "Applying Kubernetes manifests for App1, App2 and App3..."
+      sudo k3s kubectl apply -f /vagrant/confs/app1.yaml
+      sudo k3s kubectl apply -f /vagrant/confs/app2.yaml
+      sudo k3s kubectl apply -f /vagrant/confs/app3.yaml
+      sudo k3s kubectl apply -f /vagrant/confs/ingress.yaml
+      
+      echo "Provisioning complete. Apps deployed."
+    SHELL
+  end
+end
