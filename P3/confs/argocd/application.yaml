@@ -10,7 +10,7 @@ spec:
     # Repositorio público donde vive la configuración de esta práctica.
     repoURL: https://github.com/Viti01g/Inception-Of-Things.git
     # HEAD permite que Argo CD siga la rama principal sin fijar un commit concreto.
-    targetRevision: HEAD
+    targetRevision: p3
     # Argo CD sincroniza el directorio que contiene los manifests del juego.
     path: P3/confs
   destination:

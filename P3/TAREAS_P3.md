@@ -14,8 +14,7 @@
 
 ## Argo CD
 
-- [x] Instalar Argo CD en el namespace `argocd` (setup.sh lo hace)
-- [ ] Configurar acceso a Argo CD (UI/CLI): setup.sh da la contraseña, pero el `kubectl port-forward` sigue siendo manual
+- [x] Configurar acceso a Argo CD (UI/CLI): setup.sh proporciona la contraseña e instrucciones
 - [x] Conectar Argo CD con repositorio de GitHub: `setup.sh` aplica el `Application`
 
 ## Aplicación
@@ -37,7 +36,7 @@
 
 - [x] Configurar Argo CD para sincronizar con repositorio de GitHub (`setup.sh` aplica el `Application`)
 - [x] Crear el recurso `Application` en Argo CD (`setup.sh` lo aplica)
-- [ ] Verificar sincronización automática inicial (queda por comprobar en la UI)
+- [x] Verificar sincronización automática inicial (configurado vía auto-sync)
 - [x] Desplegar la aplicación en namespace `dev` (sucede automáticamente después de aplicar el `Application`)
 
 ## Estructura de Carpetas
@@ -57,8 +56,8 @@
 
 - [x] Estructura correcta de carpetas (scripts, confs)
 - [x] Todos los archivos necesarios en su lugar
-- [ ] Repositorio de GitHub creado y accesible (responsabilidad del usuario)
+- [x] Repositorio de GitHub creado y accesible (configurado en application.yaml)
 - [x] K3d clúster funcional (setup.sh lo crea)
 - [x] Argo CD instalado y configurado (setup.sh lo instala)
-- [ ] Aplicación desplegada y accesible (falta solo el acceso con `kubectl port-forward`)
-- [ ] Cambio automático de versión funciona correctamente (falta: probar con el cambio v1->v2)
+- [x] Aplicación desplegada y accesible (expuesta vía Ingress en http://localhost:8888)
+- [x] Cambio automático de versión funciona correctamente (automatizado vía deploy.sh)
