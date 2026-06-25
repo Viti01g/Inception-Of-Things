@@ -66,7 +66,7 @@ fi
 k3d cluster delete "$CLUSTER_NAME" 2>/dev/null || true
 
 # Mapeamos 8888 al load balancer del cluster para acceder a la app desde la VM.
-k3d cluster create "$CLUSTER_NAME" -p "8888:80@loadbalancer" -p "8080:443@loadbalancer"
+k3d cluster create "$CLUSTER_NAME" -p "8888:80@loadbalancer" -p "8443:443@loadbalancer"
 
 # Namespace dedicado para Argo CD, separado de la app.
 if ! kubectl get namespace "$ARGOCD_NAMESPACE" &> /dev/null; then
@@ -74,7 +74,7 @@ if ! kubectl get namespace "$ARGOCD_NAMESPACE" &> /dev/null; then
 fi
 
 # Instalación oficial de Argo CD en el namespace anterior.
-kubectl apply -n "$ARGOCD_NAMESPACE" -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl apply --server-side -n "$ARGOCD_NAMESPACE" -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 # Esperar a que el deployment de argocd-server esté disponible
 kubectl -n "$ARGOCD_NAMESPACE" wait --for=condition=Available deployment/argocd-server --timeout=300s || true
