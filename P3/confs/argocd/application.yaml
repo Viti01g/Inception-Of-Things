@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: wil-playground
+  namespace: argocd
+spec:
+  # Projecto base de Argo CD; suficiente para un despliegue de laboratorio.
+  project: default
+  source:
+    # Repositorio público donde vive la configuración de esta práctica.
+    repoURL: https://github.com/Viti01g/Inception-Of-Things.git
+    # HEAD permite que Argo CD siga la rama principal sin fijar un commit concreto.
+    targetRevision: HEAD
+    # Argo CD sincroniza el directorio que contiene los manifests del juego.
+    path: P3/confs
+  destination:
+    # El cluster local de k3d se expone como Kubernetes interno.
+    server: https://kubernetes.default.svc
+    # La aplicación se despliega en el namespace dev.
+    namespace: dev
+  syncPolicy:
+    # Auto-sync para que cualquier cambio en Git se refleje solo.
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      # Crea el namespace dev si todavía no existe.
+      - CreateNamespace=true
