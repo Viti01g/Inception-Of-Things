@@ -17,7 +17,7 @@ spec:
       containers:
         - name: playground
           # Versión inicial del playground; el cambio v1 -> v2 se hace editando este tag.
-          image: wil42/playground:v1
+          image: wil42/playground:v2
           imagePullPolicy: IfNotPresent
           ports:
             # La aplicación escucha en 8888 dentro del contenedor.
