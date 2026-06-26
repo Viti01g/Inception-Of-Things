@@ -11,29 +11,8 @@ Vagrant.configure("2") do |config|
       v.name = "vruiz-goS-p2"
     end
 
-    # Sincronizamos la carpeta local para acceder a los manifiestos
     s.vm.synced_folder "confs/", "/vagrant/confs"
-
-    # Provisionado por Shell
-    s.vm.provision "shell", inline: <<-SHELL
-      export DEBIAN_FRONTEND=noninteractive
-      # Instalar curl
-      apt-get update && apt-get install -y curl
-      # Instalar k3s en modo server
-      curl -sfL https://get.k3s.io | sh -s - server \
-        --node-ip 192.168.56.110 \
-        --write-kubeconfig-mode 644
-
-      echo "Waiting for K3S to start..."
-      sleep 15
-      
-      echo "Applying Kubernetes manifests for App1, App2 and App3..."
-      k3s kubectl apply -f /vagrant/confs/app1.yaml
-      k3s kubectl apply -f /vagrant/confs/app2.yaml
-      k3s kubectl apply -f /vagrant/confs/app3.yaml
-      k3s kubectl apply -f /vagrant/confs/ingress.yaml
-      
-      echo "Provisioning complete. Apps deployed."
-    SHELL
+    s.vm.synced_folder "scripts/", "/vagrant/scripts"
+    s.vm.provision "shell", path: "scripts/setup_server.sh"
   end
 end
