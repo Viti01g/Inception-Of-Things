@@ -12,7 +12,7 @@ spec:
     # HEAD permite que Argo CD siga la rama principal sin fijar un commit concreto.
     targetRevision: p3
     # Argo CD sincroniza el directorio que contiene los manifests del juego.
-    path: P3/confs
+    path: p3/confs
   destination:
     # El cluster local de k3d se expone como Kubernetes interno.
     server: https://kubernetes.default.svc

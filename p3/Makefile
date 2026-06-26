@@ -28,7 +28,7 @@ deploy:
 port-forward:
 	@echo "Iniciando reenvío de puertos para Argo CD..."
 	@echo "Abre https://localhost:8081 en tu navegador."
-	kubectl port-forward svc/argocd-server -n $(ARGOCD_NS) 8081:443
+	kubectl port-forward svc/argocd-server -n $(ARGOCD_NS) 8081:443 --address 0.0.0.0
 
 password:
 	@echo "Contraseña de administrador de Argo CD:"

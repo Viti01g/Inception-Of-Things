@@ -15,19 +15,21 @@ CLUSTER_NAME="iot-cluster"
 ARGOCD_NAMESPACE="argocd"
 DEV_NAMESPACE="dev"
 GITHUB_REPO="https://github.com/Viti01g/Inception-Of-Things.git"
-
-# Opcional: no forzar upgrade automático a menos que se exporte AUTO_UPGRADE=true
-sudo apt update -y
-if [ "${AUTO_UPGRADE:-false}" = "true" ]; then
-    sudo apt upgrade -y
+# Determinar directorio de instalación (preferir /usr/local/bin si es escribible, si no $HOME/bin)
+if [ -w "/usr/local/bin" ]; then
+    INSTALL_DIR="/usr/local/bin"
+else
+    INSTALL_DIR="$HOME/bin"
+    mkdir -p "$INSTALL_DIR"
+    export PATH="$INSTALL_DIR:$PATH"
 fi
 
 if ! command -v docker &> /dev/null; then
     echo "Instalando Docker..."
     curl -fsSL https://get.docker.com -o get-docker.sh
-    sudo sh get-docker.sh
+    sh get-docker.sh
     rm get-docker.sh
-    sudo usermod -aG docker "${USER}" 2>/dev/null || true
+    usermod -aG docker "${USER}" 2>/dev/null || true
     echo "Docker instalado. Puede que necesites hacer logout/login para que los permisos se apliquen."
 else
     echo "Docker already installed."
@@ -44,11 +46,7 @@ if ! command -v kubectl &> /dev/null; then
     K8S_VER=$(curl -L -s https://dl.k8s.io/release/stable.txt)
     curl -LO "https://dl.k8s.io/release/${K8S_VER}/bin/linux/${BIN_ARCH}/kubectl"
     chmod +x kubectl
-    if command -v sudo &> /dev/null; then
-        sudo mv kubectl /usr/local/bin/
-    else
-        mv kubectl ~/bin/
-    fi
+    mv kubectl "$INSTALL_DIR/"
 else
     echo "kubectl already installed."
 fi
@@ -56,7 +54,7 @@ fi
 
 if ! command -v k3d &> /dev/null; then
     echo "Instalando k3d..."
-    curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+    curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | K3D_INSTALL_DIR="$INSTALL_DIR" USE_SUDO="false" bash
 else
     echo "K3D already installed."
 fi

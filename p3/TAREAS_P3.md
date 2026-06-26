@@ -28,9 +28,9 @@
 ## Repositorio de Configuración (GitHub)
 
 - [ ] Crear repositorio público en GitHub con nombre que incluya login del equipo (responsabilidad del usuario)
-- [x] Crear estructura de carpetas en el repositorio (P3/scripts, P3/confs, P3/confs/argocd ya existen)
-- [x] Guardar `deployment.yaml`, `service.yaml` y `kustomization.yaml` en `P3/confs` (existen)
-- [x] Guardar `Application` de Argo CD en `P3/confs/argocd/application.yaml` (existe)
+- [x] Crear estructura de carpetas en el repositorio (p3/scripts, p3/confs, p3/confs/argocd ya existen)
+- [x] Guardar `deployment.yaml`, `service.yaml` y `kustomization.yaml` en `p3/confs` (existen)
+- [x] Guardar `Application` de Argo CD en `p3/confs/argocd/application.yaml` (existe)
 
 ## Integración Argo CD - GitHub
 
@@ -41,10 +41,10 @@
 
 ## Estructura de Carpetas
 
-- [x] Crear carpeta `P3/scripts` con scripts de instalación (existen setup.sh y deploy.sh)
-- [x] Crear carpeta `P3/confs` con archivos de configuración (existen deployment.yaml, service.yaml, kustomization.yaml)
-- [x] Organizar el despliegue de la app en `P3/confs` (organizado)
-- [x] Guardar el `Application` de Argo CD en `P3/confs/argocd` (existe application.yaml)
+- [x] Crear carpeta `p3/scripts` con scripts de instalación (existen setup.sh y deploy.sh)
+- [x] Crear carpeta `p3/confs` con archivos de configuración (existen deployment.yaml, service.yaml, kustomization.yaml)
+- [x] Organizar el despliegue de la app en `p3/confs` (organizado)
+- [x] Guardar el `Application` de Argo CD en `p3/confs/argocd` (existe application.yaml)
 
 ## Documentación
 

@@ -59,10 +59,10 @@ echo "=== Actualizando en GitHub (GitOps) ==="
 cd "${SCRIPT_DIR}/../.."
 
 # Verificar si hay cambios en git
-if git diff --quiet P3/confs/deployment.yaml; then
+if git diff --quiet p3/confs/deployment.yaml; then
     echo "No hay cambios locales en deployment.yaml detectados por git."
 else
-    git add P3/confs/deployment.yaml
+    git add p3/confs/deployment.yaml
     git commit -m "Update application to $TARGET_VERSION"
     echo "Ejecutando git push..."
     git push origin p3

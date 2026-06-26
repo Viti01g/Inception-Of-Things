@@ -1,0 +1,41 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/bullseye64"
+
+  config.vm.define "vruiz-goS-p3" do |s|
+    s.vm.network "private_network", ip: "192.168.56.110"
+    s.vm.hostname = "vruiz-goS-p3"
+
+    s.vm.provider "virtualbox" do |v|
+      v.memory = 2048
+      v.cpus = 2
+      v.name = "vruiz-goS-p3"
+    end
+
+    # Sincronizamos la carpeta local
+    s.vm.synced_folder ".", "/vagrant"
+
+    # Forwarding ports for access from host
+    s.vm.network "forwarded_port", guest: 8081, host: 8081, auto_correct: true # Argo CD UI
+    s.vm.network "forwarded_port", guest: 8888, host: 8888, auto_correct: true # Application (Ingress)
+
+    # Provisionado por Shell (corre como root, sin sudo)
+    s.vm.provision "shell", inline: <<-SHELL
+      export DEBIAN_FRONTEND=noninteractive
+
+      echo "Updating apt and installing dependencies..."
+      apt-get update && apt-get install -y curl make git
+      
+      # Instalar Docker si no está presente
+      if ! command -v docker &> /dev/null; then
+        echo "Installing Docker inside the VM..."
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sh get-docker.sh
+        rm -f get-docker.sh
+      fi
+
+      echo "Running setup inside the VM..."
+      cd /vagrant
+      make setup
+    SHELL
+  end
+end
