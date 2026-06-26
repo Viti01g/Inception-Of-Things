@@ -5,6 +5,9 @@ set -e
 
 echo "=== Installing K3s Agent ==="
 
+# Asegurar curl instalado
+apt-get update && apt-get install -y curl
+
 export K3S_URL="https://192.168.56.110:6443"
 export K3S_TOKEN="token-secreto-vruiz"
 

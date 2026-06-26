@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wil-playground
+  namespace: dev
+spec:
+  # Una sola réplica es suficiente para la práctica; Argo CD la mantendrá deseada.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wil-playground
+  template:
+    metadata:
+      labels:
+        app: wil-playground
+    spec:
+      containers:
+        - name: playground
+          # Versión inicial del playground; el cambio v1 -> v2 se hace editando este tag.
+          image: wil42/playground:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            # La aplicación escucha en 8888 dentro del contenedor.
+            - containerPort: 8888
+          readinessProbe:
+            # Evita que el servicio reciba tráfico hasta que la app responda.
+            httpGet:
+              path: /
+              port: 8888
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            # Si la app se queda colgada, Kubernetes la reinicia.
+            httpGet:
+              path: /
+              port: 8888
+            initialDelaySeconds: 10
+            periodSeconds: 10

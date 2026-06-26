@@ -5,6 +5,9 @@ set -e
 
 echo "=== Installing K3s Server ==="
 
+# Asegurar curl instalado
+apt-get update && apt-get install -y curl
+
 export INSTALL_K3S_EXEC="server"
 export K3S_TOKEN="token-secreto-vruiz"
 
@@ -17,5 +20,5 @@ echo "Waiting for K3s to be ready..."
 sleep 10
 
 # Verify the node is up
-sudo k3s kubectl get nodes
+k3s kubectl get nodes
 echo "=== Server setup complete ==="
